@@ -2,3 +2,4 @@ flask
 cec
 gunicorn
 flask-cors
+requests

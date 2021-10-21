@@ -9,6 +9,8 @@
 </head>
 <body>
   <h1>Axians NOC MGMT Screens</h1>
+  <button type="button" onclick="set_all(true)" class="btn btn-success">Turn All On</button>
+  <button type="button" onclick="set_all(false)" class="btn btn-danger">Turn All Off</button>
   <table class="table">
     <thead>
       <tr>
@@ -22,20 +24,23 @@
       <tr>
         <th scope="row">{{screen.name}}</th>
         <td>{{screen.ip}}</td>
-        <td><button type="button" onclick="turn_on(this.id)" id="{{screen.ip}}" class="btn btn-success">Success</button> <button type="button" onclick="turn_off(this.id)" id="{{screen.ip}}"  class="btn btn-danger">Danger</button></td>
+        <td><button type="button" onclick="turn_on(this.id)" id="{{screen.ip}}" class="btn btn-success">On</button> <button type="button" onclick="turn_off(this.id)" id="{{screen.ip}}"  class="btn btn-danger">Off</button></td>
       </tr>
     {% endfor %}
     </tbody>
   </table>
   <script>
      function send_data(state, url) {
-        var request = new XMLHttpRequest();
-        var method = "POST";
-        var data = { "state": state};
-        request.open(method, url);
-        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        request.send(data);
-     } 
+        console.log(state)
+        const data = { "state": state };
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+            }) 
+     }
      function turn_on(id) {
          console.log(id)
          var url = "http://" + id + ":5000/tv"
@@ -47,6 +52,10 @@
          var url = "http://" + id + ":5000/tv"
          console.log(url)
          send_data(false, url)
+     }
+     function set_all(state) {
+         var url = "/all";
+         send_data(state, url)         
      }
   </script>
 </body>

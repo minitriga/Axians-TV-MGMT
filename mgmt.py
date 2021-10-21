@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import render_template
+import requests
 
 app = Flask(__name__)
 
@@ -15,4 +16,10 @@ screens = [
 @app.route("/", methods=["GET"])
 def home():
     return render_template('index.html', screens=screens)
+
+@app.route("/all", methods=["POST"])
+def set_all():
+    for screen in screens:
+        data = requests.post(f"http://{screen['ip']}:5000/tv", json=request.get_json(), headers={"Content-Type": "application/json"})
+    return {"status": "yay"}
 
