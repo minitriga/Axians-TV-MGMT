@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Hello, world!</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+</head>
+<body>
+  <h1>Axians NOC MGMT Screens</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">IP</th>
+        <th scope="col">Buttons</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for screen in screens %}
+      <tr>
+        <th scope="row">{{screen.name}}</th>
+        <td>{{screen.ip}}</td>
+        <td><button type="button" onclick="turn_on(this.id)" id="{{screen.ip}}" class="btn btn-success">Success</button> <button type="button" onclick="turn_off(this.id)" id="{{screen.ip}}"  class="btn btn-danger">Danger</button></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <script>
+     function send_data(state, url) {
+        var request = new XMLHttpRequest();
+        var method = "POST";
+        var data = { "state": state};
+        request.open(method, url);
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        request.send(data);
+     } 
+     function turn_on(id) {
+         console.log(id)
+         var url = "http://" + id + ":5000/tv"
+         console.log(url)
+         send_data(true, url)
+     }
+     function turn_off(id) {
+         console.log(id)
+         var url = "http://" + id + ":5000/tv"
+         console.log(url)
+         send_data(false, url)
+     }
+  </script>
+</body>
+</html>
